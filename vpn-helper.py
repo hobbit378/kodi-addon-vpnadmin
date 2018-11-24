@@ -18,28 +18,30 @@
 
 import xbmc
 import xbmcgui
+import os
 import subprocess
 
 def main():
-    dialog = xbmcgui.Dialog()
     conn = 'iptv'
-    cmds = ["on","on-uk","off","up-uk","down-uk","update-ip", "status","restart"]
     p = None
-    msg = 'TODO: This is a dummy text'
+    msg = 'NONE'
+
+    addondir=os.path.dirname(os.path.realpath(__file__))  
+    xbmc.log(addondir,level=xbmc.LOGNOTICE)
     
-    nr = dialog.select("select VPN action ->", cmds)
+    dialog = xbmcgui.Dialog()
+    cmds = ["on","off","status","restart"]
+    nr = dialog.select("Select VPN ... ?", cmds)
     
     if nr>=0:
         cmd = cmds[nr]
-        p = subprocess.Popen(['sudo','switch-vpn',cmd],stdout=subprocess.PIPE)
+        p = subprocess.Popen(['sudo','./scripts/switch-vpn',cmd],cwd=addondir,stdout=subprocess.PIPE)
         msgobj = p.communicate()
         msg = msgobj[0]
+        dialog.textviewer('VPN Status',msg)
     
-    stat = xbmcgui.Dialog()
-    if cmd == 'status':
-        stat.textviewer('VPN status',msg)
-    elif p.returncode !=None and p.returncode !=0:
-        stat.notification('VPN', "VPN operation failed (exit code: {0})".format(p.returncode), xbmcgui.NOTIFICATION_ERROR, 5000, True)
+    if p.returncode !=None and p.returncode !=0:
+        dialog.notification('VPN', "VPN operation failed (exit code: {0})".format(p.returncode), xbmcgui.NOTIFICATION_ERROR, 5000, True)
          
     return
     
