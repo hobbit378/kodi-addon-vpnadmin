@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.vpnadmin" name="VPN Administrator" version="1.1.2" provider-name="swuty">
+<addon id="script.vpnadmin" name="VPN Switcher" version="1.2.0" provider-name="hobbit378">
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
   </requires>
@@ -10,15 +10,12 @@
       <label>30005</label>
       <visible>true</visible>
     </item>
-    <item library="syn-helper.py">
-      <label>30006</label>
-      <visible>true</visible>
-    </item>
   </menu>
   </extension>
   <extension point="kodi.addon.metadata">
     <platform>all</platform>
-    <summary lang="en">provides functionality to start, to stop  and to retrieve status information about IPSEC VPN connections</summary>
-    <description lang="en">na</description>
+    <summary lang="en">Start/Stop/View IPSEC connections</summary>
+    <description lang="en"></description>
+    <email>hobbit378@googlemail.com</email>
   </extension>
 </addon>
