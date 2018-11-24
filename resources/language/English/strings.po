@@ -1,0 +1,12 @@
+# Kodi Media Center language file
+# Addon Name: ExtendedInfo Script - Open dialog
+msgid ""
+msgstr ""
+
+msgctxt "#30005"
+msgid "VPN..."
+msgstr ""
+
+msgctxt "#30006"
+msgid "Sync..."
+msgstr ""

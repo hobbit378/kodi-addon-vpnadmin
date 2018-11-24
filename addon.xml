@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.vpnadmin" name="VPN Administrator" version="1.1.0" provider-name="swuty">
+  <requires>
+    <import addon="xbmc.python" version="2.20.0"/>
+  </requires>
+  <extension point="xbmc.python.script" library="vpn-helper.py"/>
+  <extension point="kodi.context.item">
+  <menu id="kodi.core.main">
+    <item library="vpn-helper.py"> 
+      <label>30005</label>
+      <visible>true</visible>
+    </item>
+    <item library="syn-helper.py">
+      <label>30006</label>
+      <visible>true</visible>
+    </item>
+  </menu>
+  </extension>
+  <extension point="kodi.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">provides functionality to start, to stop  and to retrieve status information about IPSEC VPN connections</summary>
+    <description lang="en">na</description>
+  </extension>
+</addon>

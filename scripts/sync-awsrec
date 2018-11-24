@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# PREREQUISITES
+#
+# make sure the USER runing the script 
+#  - can access $SERVER via ssh
+#  - $SERVER refers to an according section in the ssh_config file
+#  - USER can access the /var/aws directory
+#
+#  and OF COURSE theat rsync ist installed on this host
+#
+
+
+# turn debugging on
+set +x
+
+SERVER=aws
+SYNCUID=kodi
+EXTOPS=${EXTOPS:-""}
+
+
+function __sync()
+{
+	rsync -rlptDv $EXTOPS $SERVER:/var/recordings /var/aws
+}
+
+function simple_sync()
+{
+	EXTOPS=
+	__sync
+}
+
+function mirror_sync()
+{
+	EXTOPS+="--del"
+       	__sync
+}
+
+function clean_all()
+{
+	rm -rf /var/aws/*
+}
+
+case $1 in
+
+	"simple-sync")
+		simple_sync ;;
+	"mirror-sync")
+		mirror_sync ;;
+	"clean-all")
+		clean_all ;;
+
+esac
+

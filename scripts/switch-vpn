@@ -1,0 +1,51 @@
+#!/bin/bash
+
+if [ $(id -u) -ne 0 ] ; then
+       echo "WARNING:" \
+       	    "This program requires ROOT privileges to run properly"
+fi       
+
+
+IPT=$(which iptables)
+test -x $IPT || echo "iptables not found in PATH"
+IPSEC=$(which ipsec)
+test -x $IPSEC || echo "ipsec not found in PATH"
+
+CHAIN=IPTV
+MARK=100
+HTS=192.168.210.1
+
+
+case $1 in
+
+	'off')
+		$IPT -t mangle -F $CHAIN
+		$IPT -t mangle -A $CHAIN -d $HTS -j MARK --set-mark $MARK
+		$IPT -t mangle -A $CHAIN -j ACCEPT ;;
+
+	'on')
+		$IPT -t mangle -F $CHAIN
+		$IPT -t mangle -A $CHAIN -j MARK --set-mark $MARK
+		$IPT -t mangle -A $CHAIN -j ACCEPT ;;
+
+	'list')
+		$IPT -t mangle -L $CHAIN ;;
+
+	'status')
+		echo ">> CONNECTION <<"
+		$IPSEC status
+		echo ">> IPTABLES <<"
+		$IPT -t mangle -L $CHAIN ;;
+
+
+	'shutdown')
+		$IPSEC stop ;;
+
+	'restart')
+		$IPSEC restart ;;
+
+	*)
+		echo "'$1' is no valid option" ;;
+
+esac
+
