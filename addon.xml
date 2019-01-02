@@ -3,10 +3,10 @@
   <requires>
     <import addon="xbmc.python" version="2.20.0"/>
   </requires>
-  <extension point="xbmc.python.script" library="vpn-helper.py"/>
+  <extension point="xbmc.python.script" library="addon.py"/>
   <extension point="kodi.context.item">
   <menu id="kodi.core.main">
-    <item library="vpn-helper.py"> 
+    <item library="addon.py"> 
       <label>30005</label>
       <visible>true</visible>
     </item>
