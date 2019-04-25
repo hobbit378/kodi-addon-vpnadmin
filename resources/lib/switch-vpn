@@ -29,23 +29,24 @@ print_help()
 switch_gateway()
 {
 	# flush 'iptv' chain
-	${IPT} -t mangle -F ${CHAIN}
+	# ${IPT} -t mangle -F ${CHAIN}
 	# switch default gateway to X vpn connection
-	${IPT} -t mangle -A ${CHAIN} ! -d 192.168.14.0/24 -j MARK --set-mark $1
+	${IPT} -t mangle -I ${CHAIN} 1 ! -d 192.168.14.0/24 -j MARK --set-mark $1
         # always maintain access to tvheadend server in Germany	
-	${IPT} -t mangle -A ${CHAIN} -d 192.168.210.1 -j MARK --set-mark $MARK_DE
+	# ${IPT} -t mangle -A ${CHAIN} -d 192.168.210.1 -j MARK --set-mark $MARK_DE
 	# continue processing rest of chain
-	${IPT} -t mangle -A ${CHAIN} -j RETURN
+	# ${IPT} -t mangle -A ${CHAIN} -j RETURN
 }
 
 restore_gateway()
 {
+	${IPT} -t mangle -D ${CHAIN} 1
 	# flush 'iptv' chain
-	${IPT} -t mangle -F ${CHAIN}
+	# ${IPT} -t mangle -F ${CHAIN}
         # always maintain access to tvheadend server in Germany	
-	${IPT} -t mangle -A ${CHAIN} -d 192.168.210.1 -j MARK --set-mark $MARK_DE
+	# ${IPT} -t mangle -A ${CHAIN} -d 192.168.210.1 -j MARK --set-mark $MARK_DE
 	# continue processing rest of chain
-	${IPT} -t mangle -A ${CHAIN} -j RETURN
+	# ${IPT} -t mangle -A ${CHAIN} -j RETURN
 }
 
 
