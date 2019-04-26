@@ -11,13 +11,11 @@ if [ $(id -u) -ne 0 ] ; then
 fi       
 
 
-IPT=$(which iptables)
 IPSEC=$(which ipsec)
-CHAIN=mwe-mangle-iptv
-MARK_DE=100
-
-test -x ${IPT} || echo "'iptables' not found in PATH" 
 test -x ${IPSEC} || echo "'ipsec' not found in PATH" 
+
+CLASSID=0x000a000a
+IPMARK=100
 
 print_help()
 {
@@ -25,54 +23,41 @@ print_help()
 	echo "$0   on | off | status | restart" 
 }
 
-
 switch_gateway()
 {
-	# flush 'iptv' chain
-	# ${IPT} -t mangle -F ${CHAIN}
-	# switch default gateway to X vpn connection
-	${IPT} -t mangle -I ${CHAIN} 1 ! -d 192.168.14.0/24 -j MARK --set-mark $1
-        # always maintain access to tvheadend server in Germany	
-	# ${IPT} -t mangle -A ${CHAIN} -d 192.168.210.1 -j MARK --set-mark $MARK_DE
-	# continue processing rest of chain
-	# ${IPT} -t mangle -A ${CHAIN} -j RETURN
+	echo $1 >> /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
+	cat /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
 }
 
 restore_gateway()
 {
-	${IPT} -t mangle -D ${CHAIN} 1
-	# flush 'iptv' chain
-	# ${IPT} -t mangle -F ${CHAIN}
-        # always maintain access to tvheadend server in Germany	
-	# ${IPT} -t mangle -A ${CHAIN} -d 192.168.210.1 -j MARK --set-mark $MARK_DE
-	# continue processing rest of chain
-	# ${IPT} -t mangle -A ${CHAIN} -j RETURN
+	echo 0x0 >> /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
+	cat /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
 }
 
 
 case $1 in
 
 	'on')
-		switch_gateway $MARK_DE
+		echo -n "net_cls.classid: "
+		switch_gateway $CLASSID
 		echo ">> CONNECTION <<"
 		${IPSEC} status 
-		echo ">> IPTABLES <<"
-		${IPT} -t mangle -vL $CHAIN 
-		ping -c 5 www.google.com ;;
+		ping -m $IPMARK -c 3 www.google.com ;;
 
 	'off')
-		restore_gateway 
-		echo ">> IPTABLES <<"
-		${IPT} -t mangle -vL $CHAIN ;;
+		echo -n "net_cls.classid: "
+		restore_gateway ;;
 
 	'ping')
-		ping -c 5 www.google.com ;;
+		ping -m $IPMARK -c 3 www.google.com ;;
 
 	'status')
+		echo -n "net_cls.classid: "
+		cat /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
 		echo ">> CONNECTION <<"
 		${IPSEC} status
-		echo ">> IPTABLES <<"
-		${IPT} -t mangle -vL $CHAIN ;;
+		ping -m $IPMARK -c 3 www.google.com ;;
 
 	'restart')
 		${IPSEC} restart ;;
