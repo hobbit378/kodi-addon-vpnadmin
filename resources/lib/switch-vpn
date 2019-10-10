@@ -20,7 +20,7 @@ IPMARK=100
 print_help()
 {
 	echo -n "Usage: "
-	echo "$0   on | off | status | restart" 
+	echo "$0 start | stop | status | restart | help" 
 }
 
 switch_gateway()
@@ -35,29 +35,34 @@ restore_gateway()
 	cat /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
 }
 
+status()
+{
+	echo ">> KODI net_clsid <<"
+	cat /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
+	echo
+	echo ">> IPSEC Status <<"
+	${IPSEC} status 
+	echo
+	echo ">> Ping Status <<" 
+	echo ">trying ping via tunnel"
+	ping -m $IPMARK -c 3 www.google.com
+	echo
+	echo ">trying ping w/out tunnel"
+	ping -c 3 www.google.com
+
+}
+
 
 case $1 in
 
-	'on')
-		echo -n "net_cls.classid: "
-		switch_gateway $CLASSID
-		echo ">> CONNECTION <<"
-		${IPSEC} status 
-		ping -m $IPMARK -c 3 www.google.com ;;
+	'start')
+		switch_gateway $CLASSID ;;
 
-	'off')
-		echo -n "net_cls.classid: "
+	'stop')
 		restore_gateway ;;
 
-	'ping')
-		ping -m $IPMARK -c 3 www.google.com ;;
-
 	'status')
-		echo -n "net_cls.classid: "
-		cat /sys/fs/cgroup/net_cls/service/kodi/net_cls.classid
-		echo ">> CONNECTION <<"
-		${IPSEC} status
-		ping -m $IPMARK -c 3 www.google.com ;;
+		status ;;
 
 	'restart')
 		${IPSEC} restart ;;

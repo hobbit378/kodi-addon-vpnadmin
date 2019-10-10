@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="32001">
+        <setting label="32011" type="text"   id="conn" default="iptv_de"/>
+        <setting label="32012" type="number" id="netcls" option="int" default="0x000a000a"/>
+        <setting label="32013" type="mumber" id="ipmark" option="int" default="100" />
+        <setting type="sep"/>
+        <setting label="32110" type="bool" id="startup" default="false"/>
+    </category>
+</settings>
