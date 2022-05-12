@@ -15,25 +15,21 @@ msgstr ""
 "X-Generator: Poedit 1.8.12\n"
 
 msgctxt "#31010"
-msgid "VPN/IPsec"
+msgid "VPN"
 msgstr ""
 
 msgctxt "#32001"
-msgid "VPN Switcher Settings"
+msgid "VPN Settings"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Name of IPSEC connection"
-msgstr ""
-
-msgctxt "#32012"
-msgid "cgroups NetCls-ID"
+msgid "Name o/ IPSEC connection"
 msgstr ""
 
 msgctxt "#32013"
-msgid "mark for pkgs to tunnel"
+msgid "Mark f/ IPSEC packages"
 msgstr ""
 
 msgctxt "#32110"
-msgid "Start VPN at boot"
+msgid "Start at boot"
 msgstr ""
